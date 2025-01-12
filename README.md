@@ -137,7 +137,3 @@ Enable logging in the program to track errors and progress:
 ## Contributions
 Contributions are welcome! Feel free to fork the repository, submit pull requests, or open issues.
 
----
-
-## License
-This project is licensed under the MIT License.
