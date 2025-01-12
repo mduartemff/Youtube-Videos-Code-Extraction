@@ -1,0 +1,6 @@
+yt-dlp
+ffmpeg-python
+pytesseract
+opencv-python
+webvtt-py
+requests
