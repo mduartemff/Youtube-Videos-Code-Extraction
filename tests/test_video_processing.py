@@ -6,9 +6,30 @@ verifying that videos are properly downloaded and frames are extracted
 at the configured frame rate (defined in config.py).
 """
 
-from video_processing import process_video
-from config import VIDEO_URL
+from src.video_processing import process_video
+from src.config import VIDEO_URL
 import os
+import shutil
+
+def cleanup_test_files(video_path=None, frames_dir=None):
+    """
+    Clean up any test artifacts after testing.
+    """
+    # Clean up video file
+    if video_path and os.path.exists(video_path):
+        try:
+            os.remove(video_path)
+            print(f"  Cleaned up: {video_path}")
+        except Exception as e:
+            print(f"  Warning: Could not remove {video_path}: {str(e)}")
+    
+    # Clean up frames directory
+    if frames_dir and os.path.exists(frames_dir):
+        try:
+            shutil.rmtree(frames_dir)
+            print(f"  Cleaned up: {frames_dir}")
+        except Exception as e:
+            print(f"  Warning: Could not remove {frames_dir}: {str(e)}")
 
 def test_process_video():
     """
@@ -19,9 +40,9 @@ def test_process_video():
     2. Verifies the video file exists and has content
     3. Extracts frames from the video
     4. Verifies frames are properly extracted
-    
-    The frame rate is configured in config.py
     """
+    video_path = None
+    frames_dir = None
     try:
         # Test the function
         print("Starting video processing test...")
@@ -49,6 +70,10 @@ def test_process_video():
     except Exception as e:
         print(f"\n✗ Test failed with error: {str(e)}")
         raise e
+    finally:
+        # Clean up test artifacts
+        print("\nCleaning up test artifacts...")
+        cleanup_test_files(video_path, frames_dir)
 
 if __name__ == "__main__":
     test_process_video() 

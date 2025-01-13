@@ -72,4 +72,4 @@ def process_frames(frames_dir):
                 print(f"Error processing frame {frame_file}: {str(e)}")
                 continue
                 
-    return extracted_data
+    return extracted_data 

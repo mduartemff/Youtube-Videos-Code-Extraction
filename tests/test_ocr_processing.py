@@ -12,7 +12,7 @@ It tests both image preprocessing and text extraction capabilities by:
 import os
 import cv2
 import numpy as np
-from ocr_processing import process_frames, preprocess_image
+from src.ocr_processing import process_frames, preprocess_image
 
 def create_test_image(text, output_path):
     """

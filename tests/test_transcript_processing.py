@@ -9,8 +9,8 @@ It tests the YouTube subtitle extraction and parsing capabilities by:
 4. Ensuring proper cleanup of temporary files
 """
 
-from transcript_processing import process_transcript
-from config import VIDEO_URL
+from src.transcript_processing import process_transcript
+from src.config import VIDEO_URL
 import os
 import glob
 
@@ -36,7 +36,7 @@ def test_process_transcript():
     3. Validates caption parsing and structure
     4. Checks caption content quality
     
-    Use a known video (configured in config.py) to ensure
+    The test uses a known video (configured in config.py) to ensure
     consistent and reliable testing of the transcript processing pipeline.
     
     Raises:

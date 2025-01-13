@@ -10,7 +10,7 @@ import yt_dlp
 import ffmpeg
 import os
 import shutil
-from config import FRAME_RATE
+from src.config import FRAME_RATE
 
 def process_video(video_url):
     """
@@ -65,4 +65,4 @@ def process_video(video_url):
         print(f"Error extracting frames: {str(e)}")
         raise
 
-    return output_path, frames_dir
+    return output_path, frames_dir 
