@@ -13,7 +13,11 @@ import shutil
 
 def cleanup_test_files(video_path=None, frames_dir=None):
     """
-    Clean up any test artifacts after testing.
+    Clean up test artifacts after testing.
+    
+    Args:
+        video_path (str): Path to the downloaded video file
+        frames_dir (str): Directory containing the extracted frames
     """
     # Clean up video file
     if video_path and os.path.exists(video_path):
@@ -33,7 +37,7 @@ def cleanup_test_files(video_path=None, frames_dir=None):
 
 def test_process_video():
     """
-    Test video downloading and frame extraction.
+    Test the video downloading and frame extraction process.
     
     This test:
     1. Downloads a video from the configured URL
@@ -44,28 +48,21 @@ def test_process_video():
     video_path = None
     frames_dir = None
     try:
-        # Test the function
         print("Starting video processing test...")
         video_path, frames_dir = process_video(VIDEO_URL)
         
-        # Check if video was downloaded
         print(f"\nChecking video download...")
-        if os.path.exists(video_path):
-            print(f"✓ Video downloaded successfully: {video_path}")
-            print(f"  File size: {os.path.getsize(video_path) / (1024*1024):.2f} MB")
-        else:
-            print("✗ Video download failed")
+        assert os.path.exists(video_path), "Video download failed"
+        print(f"✓ Video downloaded successfully: {video_path}")
+        print(f"  File size: {os.path.getsize(video_path) / (1024*1024):.2f} MB")
             
-        # Check if frames were extracted
         print(f"\nChecking frame extraction...")
-        if os.path.exists(frames_dir):
-            frames = [f for f in os.listdir(frames_dir) if f.endswith('.png')]
-            print(f"✓ Frames extracted successfully: {len(frames)} frames in {frames_dir}")
-            if frames:
-                print(f"  First frame: {frames[0]}")
-                print(f"  Last frame: {frames[-1]}")
-        else:
-            print("✗ Frame extraction failed")
+        assert os.path.exists(frames_dir), "Frame extraction failed"
+        frames = [f for f in os.listdir(frames_dir) if f.endswith('.png')]
+        assert len(frames) > 0, "No frames extracted"
+        print(f"✓ Frames extracted successfully: {len(frames)} frames in {frames_dir}")
+        print(f"  First frame: {frames[0]}")
+        print(f"  Last frame: {frames[-1]}")
             
     except Exception as e:
         print(f"\n✗ Test failed with error: {str(e)}")

@@ -10,24 +10,29 @@ import os
 from groq import Groq
 from src.config import GROQ_API_KEY
 
-# Initialize Groq client
-client = Groq(api_key=GROQ_API_KEY)
-
-def process_content(text_content, model="mixtral-8x7b-32768"):
+def process_content(text_content, model="llama-3.1-8b-instant"):
     """
     Process text content using Groq's language model.
     
     Args:
         text_content (str): The text content to process
-        model (str): The Groq model to use (default: mixtral-8x7b-32768)
+        model (str): The Groq model to use (default: llama-3.1-8b-instant)
         
     Returns:
         dict: The processed response from Groq
         
     Raises:
+        ValueError: If text_content is empty or too long
         Exception: If API call fails or processing error occurs
     """
+    if not text_content.strip():
+        raise ValueError("Text content cannot be empty")
+    
+    if len(text_content) > 10000:  # Adjust limit as needed
+        raise ValueError("Text content is too long")
+    
     try:
+        client = Groq(api_key=GROQ_API_KEY)
         completion = client.chat.completions.create(
             model=model,
             messages=[

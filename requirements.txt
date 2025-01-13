@@ -4,3 +4,8 @@ pytesseract
 opencv-python
 webvtt-py
 requests
+groq
+pytest
+python-dotenv
+
+
