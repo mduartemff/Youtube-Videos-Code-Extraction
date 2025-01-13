@@ -1,9 +1,12 @@
 """
-Test suite for transcript processing functionality.
+Test Suite for Transcript Processing Module
 
-This module tests the YouTube video transcript extraction process,
-verifying that subtitles are properly downloaded and parsed into
-the expected format.
+This module provides comprehensive testing for the transcript processing functionality.
+It tests the YouTube subtitle extraction and parsing capabilities by:
+1. Downloading subtitles from a test video
+2. Verifying VTT file creation and content
+3. Validating caption parsing and structure
+4. Ensuring proper cleanup of temporary files
 """
 
 from transcript_processing import process_transcript
@@ -11,19 +14,38 @@ from config import VIDEO_URL
 import os
 import glob
 
+def cleanup_test_files():
+    """
+    Clean up any test artifacts (VTT files) after testing.
+    """
+    # Clean up any VTT files
+    for vtt_file in glob.glob("transcript*.vtt"):
+        try:
+            os.remove(vtt_file)
+            print(f"  Cleaned up: {vtt_file}")
+        except Exception as e:
+            print(f"  Warning: Could not remove {vtt_file}: {str(e)}")
+
 def test_process_transcript():
     """
-    Test transcript extraction and parsing.
+    Test transcript extraction and parsing functionality.
     
-    This test:
-    1. Downloads subtitles from the configured video URL
-    2. Verifies the VTT file exists and has content
-    3. Checks the parsed captions structure
-    4. Verifies caption formatting and content
+    This test function:
+    1. Downloads subtitles from the configured test video
+    2. Verifies successful subtitle file creation
+    3. Validates caption parsing and structure
+    4. Checks caption content quality
+    
+    Use a known video (configured in config.py) to ensure
+    consistent and reliable testing of the transcript processing pipeline.
+    
+    Raises:
+        Exception: If any step of the transcript processing fails
     """
     try:
-        # Test the function
         print("Starting transcript processing test...")
+        
+        # Test the function
         captions = process_transcript(VIDEO_URL)
         
         # Check if transcript file was created
@@ -66,6 +88,10 @@ def test_process_transcript():
     except Exception as e:
         print(f"\n✗ Test failed with error: {str(e)}")
         raise e
+    finally:
+        # Clean up test artifacts
+        print("\nCleaning up test artifacts...")
+        cleanup_test_files()
 
 if __name__ == "__main__":
     test_process_transcript() 
