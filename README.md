@@ -1,20 +1,24 @@
-
-# YouTube Code Extractor
+# YouTube Videos Code Extractor
 
 ## Overview
-The **YouTube Code Extractor** is a Python-based tool designed to automate the process of extracting, processing, and consolidating code snippets displayed in YouTube videos. It uses advanced OCR and integrates with Groq's LLM API (`llama-3.1-70b-versatile`) to enhance and contextualize extracted code snippets.
+The **YouTube Code Extractor** is a Python-based tool designed to automate the process of extracting, processing, and consolidating code snippets displayed in YouTube videos. It uses advanced OCR and integrates with Groq's LLM API to enhance and contextualize extracted code snippets.
 
 ---
 
 ## Features
 - **Automated Video Processing:**
-  - Downloads YouTube videos and transcripts using `yt-dlp`.
-- **Frame Extraction:**
-  - Extracts video frames at a specified interval using `ffmpeg`.
-- **OCR and Preprocessing:**
-  - Reads and preprocesses extracted frames to identify code snippets using Tesseract OCR.
-- **Code Consolidation:**
-  - Uses Groq's LLM API to consolidate and improve extracted code snippets with contextual information from video transcripts.
+  - Downloads YouTube videos using `yt-dlp`
+  - Extracts frames at configurable intervals using `ffmpeg`
+- **Transcript Processing:**
+  - Downloads and parses video subtitles/captions
+  - Supports both manual and auto-generated subtitles
+- **OCR Processing:**
+  - Preprocesses frames for optimal text recognition
+  - Extracts text from frames using Tesseract OCR
+- **Content Analysis:**
+  - Uses Groq's LLMs for content understanding
+  - Analyzes both transcript and extracted text
+  - Identifies code snippets and technical content
 
 ---
 
@@ -22,68 +26,71 @@ The **YouTube Code Extractor** is a Python-based tool designed to automate the p
 
 ### System Requirements
 - Python 3.8 or later
-- Internet connection (to download videos and interact with Groq's API)
+- FFmpeg for video processing
+- Tesseract OCR for text extraction
 
 ### Dependencies
-Install the following Python libraries using the provided `requirements.txt` file:
-- `yt-dlp`
-- `ffmpeg-python`
-- `pytesseract`
-- `opencv-python`
-- `webvtt-py`
-- `requests`
+All dependencies are listed in `requirements.txt`:
+```bash
+python-dotenv==1.0.0
+yt-dlp==2023.12.30
+ffmpeg-python==0.2.0
+pytesseract==0.3.10
+opencv-python==4.8.1.78
+webvtt-py==0.4.6
+groq==0.4.2
+pytest==7.4.4
+```
 
 ---
 
 ## Setup Instructions
 
 ### Step 1: Clone the Repository
-Download the repository to your local machine:
 ```bash
 git clone <repository-url>
-cd yt_code_extractor
+cd youtube-code-extractor
 ```
 
-### Step 2: Set Up a Virtual Environment
-Create and activate a virtual environment to manage dependencies:
+### Step 2: Set Up Virtual Environment
 ```bash
-python3 -m venv yt_code_extractor_env
-source yt_code_extractor_env/bin/activate  # macOS/Linux
-yt_code_extractor_env\Scripts\activate    # Windows
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+.\venv\Scripts\activate   # Windows
 ```
 
 ### Step 3: Install Dependencies
-Install all required packages:
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 4: Install FFmpeg
-Ensure `ffmpeg` is installed on your system and added to the PATH:
-- **macOS/Linux:** Install via package manager:
-  ```bash
-  sudo apt install ffmpeg  # Debian/Ubuntu
-  brew install ffmpeg      # macOS
-  ```
-- **Windows:** Download and install FFmpeg from [official website](https://ffmpeg.org/).
-
-### Step 5: Install Tesseract OCR
-Install Tesseract OCR on your system:
-- **macOS:** Install via Homebrew:
-  ```bash
-  brew install tesseract
-  ```
-- **Linux:** Install via package manager:
-  ```bash
-  sudo apt install tesseract-ocr
-  ```
-- **Windows:** Download and install from [Tesseract GitHub](https://github.com/UB-Mannheim/tesseract).
-
-### Step 6: Set the Groq API Key
-Obtain your Groq API key and set it as an environment variable:
+### Step 4: Configure Environment
+Create a `.env` file with your settings:
 ```bash
-export GROQ_API_KEY="your_api_key"  # macOS/Linux
-set GROQ_API_KEY=your_api_key       # Windows
+GROQ_API_KEY=your_groq_api_key
+VIDEO_URL=https://www.youtube.com/watch?v=your_video_id
+FRAME_RATE=0.5  # Extract one frame every 2 seconds
+```
+
+---
+
+## Project Structure
+```
+youtube-code-extractor/
+├── src/                         # Source code
+│   ├── video_processing.py      # Video download and frame extraction
+│   ├── transcript_processing.py # Subtitle processing
+│   ├── ocr_processing.py        # Frame OCR and text extraction
+│   ├── groq_integration.py      # Groq API integration
+│   ├── config.py                # Configuration management
+│   └── main.py                  # Main application entry point
+├── tests/                       # Test suite
+│   ├── test_video_processing.py
+│   ├── test_transcript_processing.py
+│   └── test_ocr_processing.py
+├── docs/                        # Documentation
+├── requirements.txt             # Project dependencies
+└── README.md                    # Project documentation
 ```
 
 ---
@@ -91,46 +98,40 @@ set GROQ_API_KEY=your_api_key       # Windows
 ## Usage
 
 ### Basic Usage
-Run the program with a YouTube video URL:
 ```bash
-python main.py <YouTube Video URL>
+python -m src.main
 ```
 
-### Example
-#### Input:
-```bash
-python main.py https://www.youtube.com/watch?v=example_video
-```
+The program will:
+1. Download the video specified in your `.env` file
+2. Extract frames at the configured frame rate
+3. Process the video transcript
+4. Perform OCR on extracted frames
+5. Analyze content using Groq's language model
 
-#### Output:
-The consolidated code will be saved in the `consolidated_code.py` file.
+### Running Tests
+```bash
+python -m pytest tests/
+```
+All tests include proper cleanup of temporary files and artifacts.
 
 ---
 
-## Example Workflow
-1. Provide a YouTube video URL containing coding examples.
-2. The program downloads the video and transcript.
-3. Frames are extracted, and OCR identifies code snippets.
-4. The Groq LLM consolidates code snippets using transcript context.
-5. The final code is saved to `consolidated_code.py`.
+## Error Handling
 
----
-
-## Error Handling and Troubleshooting
-
-### Common Errors
-1. **`GROQ_API_KEY` Not Set:**
-   - Ensure the API key is correctly set in your environment variables.
-2. **FFmpeg Not Found:**
-   - Verify FFmpeg is installed and added to your system PATH.
-3. **Tesseract OCR Issues:**
-   - Ensure Tesseract is installed and accessible via the command line.
-4. **API Rate Limits:**
-   - If the Groq API rate limit is exceeded, retry after some time.
+### Common Issues
+1. **Environment Setup:**
+   - Ensure `.env` file exists with required variables
+   - Check that GROQ_API_KEY is valid
+2. **Video Processing:**
+   - Verify FFmpeg is installed and in PATH
+   - Check video URL is accessible
+3. **OCR Processing:**
+   - Ensure Tesseract OCR is installed
+   - Verify frame extraction was successful
 
 ### Debugging
-Enable logging in the program to track errors and progress:
-- Logs are saved in `yt_code_extractor.log`.
+Enable detailed logging by setting appropriate log levels in the code.
 
 ---
 
