@@ -4,7 +4,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-venv/
 env/
 build/
 develop-eggs/
@@ -17,21 +16,26 @@ lib64/
 parts/
 sdist/
 var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 
+# Virtual Environment
+venv/
+ENV/
+
+# Project specific
+*.vtt
+transcript*
+frames/
+*.mp4
+*.webm
+
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
 
-# Environment
-.env
-.env.local
-*.log
-
-# Project specific
-consolidated_code.py 
+# Environment variables
+.env 
